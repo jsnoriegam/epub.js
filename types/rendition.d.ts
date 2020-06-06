@@ -80,8 +80,8 @@ export default class Rendition {
 
     direction(dir: string): void;
 
-    display(target?: string): Promise<void>;
-    display(target?: number): Promise<void>;
+    display(target?: string, muted?: boolean): Promise<void>;
+    display(target?: number, muted?: boolean): Promise<void>;
 
     flow(flow: string): void;
 

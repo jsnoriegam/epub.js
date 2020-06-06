@@ -297,11 +297,11 @@ class Rendition {
 	 * @param  {string} target Url or EpubCFI
 	 * @return {Promise}
 	 */
-	display(target){
+	display(target, muted){
 		if (this.displaying) {
 			this.displaying.resolve();
 		}
-		return this.q.enqueue(this._display, target);
+		return this.q.enqueue(this._display, target, muted);
 	}
 
 	/**
@@ -310,10 +310,13 @@ class Rendition {
 	 * @param  {string} target Url or EpubCFI
 	 * @return {Promise}
 	 */
-	_display(target){
+	_display(target, muted){
 		if (!this.book) {
 			return;
 		}
+
+		muted = muted || false
+
 		var isCfiString = this.epubcfi.isCfiString(target);
 		var displaying = new defer();
 		var displayed = displaying.promise;
@@ -346,7 +349,9 @@ class Rendition {
 				 * @memberof Rendition
 				 */
 				this.emit(EVENTS.RENDITION.DISPLAYED, section);
-				this.reportLocation();
+				if(!muted) {
+					this.reportLocation();
+				}
 			}, (err) => {
 				/**
 				 * Emit that has been an error displaying
